@@ -37,19 +37,22 @@ const AnimatedRoutes = () => {
   );
 };
 
-import { Geolocation } from "@capacitor/geolocation";
-
 function App() {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
-    (async () => {
-      try {
-        await Geolocation.requestPermissions();
-      } catch (e) {
-        console.log("Location permission error", e);
+    const getCurrentPosition = async () => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (p) => console.log(p),
+          (err) => console.error(err),
+          { enableHighAccuracy: true }
+        );
+      } else {
+        console.log("Geolocation is not supported by this browser.");
       }
-    })();
+    };
+    getCurrentPosition();
   }, []);
 
   return (
